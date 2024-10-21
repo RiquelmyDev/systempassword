@@ -1,0 +1,1 @@
+own project of a website that stores my emails, and the passwords for a specific email, this will help me avoid forgetting my email
