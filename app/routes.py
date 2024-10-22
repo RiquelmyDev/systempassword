@@ -1,53 +1,9 @@
-from flask import Flask, render_template, request, redirect, session
-import sqlite3
-import bcrypt
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+from .models import create_user, get_user_by_username, add_email, get_emails_by_user_id, create_users_table, create_emails_table
+from functools import wraps
 
-app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta'
+# Criação do Blueprint para as rotas
+bp = Blueprint('auth', __name__)
 
-# Conexão com o banco de dados
-def create_connection():
-    return sqlite3.connect('database/passwords.db')  # Alterando para a pasta 'database'
-
-@app.route('/')
-def index():
-    return render_template('login.html')
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        conn = create_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
-        user = cursor.fetchone()
-
-        if user and bcrypt.checkpw(password.encode('utf-8'),user[2]):
-            session['user_id'] = user[0] # Armazenar ID do usuário na sessão
-            return redirect('/dashboard')
-        else:
-            return 'Login ou senha inválidos'
-        
-    return render_template('login.html')
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-        conn = create_connection()
-        cursor = conn.cursor()
-        try:
-            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed))
-            conn.commit()
-        except sqlite3.IntegrityError:
-            return 'O nome de usuário já existe'
-
-        return redirect('/login')
-    
-    return render_template('register.html')
+# decorador para proteger as rotas que requerem login
