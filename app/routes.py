@@ -4,32 +4,32 @@ from .models import create_user, get_user_by_username, add_email, get_emails_by_
 from functools import wraps
 
 # Criação do Blueprint para as rotas
-bp = Blueprint('auth', __name__)
+bp = Blueprint('main', __name__)
 
-# decorador para proteger as rotas que requerem login
+# Decorador para proteger as rotas que requerem login
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
             flash('Você precisa estar logado para acessar essa página.')
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('main.login'))  # Altere para 'main.login'
         return f(*args, **kwargs)
     return decorated_function
 
-#  Rota para o registro de novos usuários
+# Rota para o registro de novos usuários
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        # gera o hash da senha
+        # Gera o hash da senha
         hashed_password = generate_password_hash(password)
 
         # Cria um novo usuário no banco de dados
         create_user(username, hashed_password)
         flash('Usuário registrado com sucesso! Faça login para continuar.')
-        return redirect(url_for('auth.login'))      
+        return redirect(url_for('main.login'))  # Altere para 'main.login'      
     return render_template('register.html')
 
 # Rota para login de usuários
@@ -44,9 +44,9 @@ def login():
 
         # Verifica se o usuário existe e se a senha está correta
         if user and check_password_hash(user['password'], password):
-            session['user_id'] = user['id'] # Armazena o ID do usuário na sessão
+            session['user_id'] = user['id']  # Armazena o ID do usuário na sessão
             flash('Login bem-sucedido!')
-            return redirect(url_for('auth.dashboard')) # redirecioina para o dashboard
+            return redirect(url_for('main.dashboard'))  # Altere para 'main.dashboard'
         else:
             flash('Usuário ou senha inválidos.')
 
@@ -56,7 +56,7 @@ def login():
 @bp.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template(dashboard.html)       
+    return render_template('dashboard.html')  # Corrigido para 'dashboard.html'
 
 # Rota para adicionar um novo email
 @bp.route('/manage_passwords', methods=['GET', 'POST'])
@@ -71,10 +71,9 @@ def manage_passwords():
         # Adiciona o novo email ao banco de dados
         add_email(user_id, email_type, email_address, password)
         flash('Email adicionado com sucesso!')
-        return redirect(url_for('auth.manage_passwords'))
+        return redirect(url_for('main.manage_passwords'))  # Altere para 'main.manage_passwords'
 
     return render_template('manage_passwords.html')
-
 
 # Rota para visualizar os emails salvos
 @bp.route('/view_passwords')
@@ -84,11 +83,10 @@ def view_passwords():
     emails = get_emails_by_user_id(user_id)  # Obtém os emails do usuário
     return render_template('view_passwords.html', emails=emails)
 
-
 # Rota para logout
 @bp.route('/logout')
 @login_required
 def logout():
     session.clear()  # Limpa a sessão
     flash('Você foi desconectado com sucesso.')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('main.login'))  # Altere para 'main.login'

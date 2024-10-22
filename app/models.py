@@ -2,6 +2,38 @@ import sqlite3
 
 DATABASE = 'database/passwords.db' # Caminho para o banco de dados
 
+import sqlite3
+
+def create_tables():
+    conn = sqlite3.connect('database/passwords.db')  # Caminho correto para o seu banco de dados
+    cursor = conn.cursor()
+    
+    # Criação da tabela users
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            password TEXT NOT NULL
+        )
+    ''')
+
+    # Criação da tabela passwords (ou como você nomeou)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS passwords (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            email_type TEXT NOT NULL,
+            email TEXT NOT NULL,
+            password TEXT NOT NULL,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
+
+
+
 # Função para criar uma conexão com o banco de dados
 def create_connection():
     try:
