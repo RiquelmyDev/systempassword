@@ -75,8 +75,8 @@ def get_emails_by_user_id(user_id):
     conn = create_connection()
     if conn:  # Verifica se a conexão foi estabelecida
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM emails WHERE user_id = ?", (user_id,))
-        emails = cursor.fetchall()  # Obtém todos os emails do usuário
-        conn.close()  # Fecha a conexão após a consulta
-        return emails
+        cursor.execute('''SELECT email_type, email, password FROM emails WHERE user_id = ?''', (user_id,))
+        emails = cursor.fetchall()  # Obtém todos os resultados da consulta
+        conn.close()
+        return emails  # Retorna uma lista de tuplas com (tipo, email, senha)
     return []
