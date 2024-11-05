@@ -94,3 +94,6 @@ def logout():
     session.clear()  # Limpa a sessão
     flash('Você foi desconectado com sucesso.')
     return redirect(url_for('main.login'))  # Altere para 'main.login'"""
+
+
+#ISSO DAQUI VAI SERVIR SO PRA ATUALIZAR MEU GITHUB kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
