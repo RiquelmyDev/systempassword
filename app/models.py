@@ -1,10 +1,99 @@
 import sqlite3
 
+DATABASE = 'database/passwords.db'  # Caminho para o banco de dados
+
+# Função para criar uma conexão com o banco de dados
+def create_connection():
+    try:
+        conn = sqlite3.connect(DATABASE)
+        conn.row_factory = sqlite3.Row  # Permite acessar as colunas pelo nome
+        return conn
+    except sqlite3.Error as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
+        return None
+
+# Função para criar as tabelas no banco de dados
+def create_tables(): 
+    conn = create_connection()
+    if conn:
+        cursor = conn.cursor()
+        
+        # Criação da tabela de usuários
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                password TEXT NOT NULL
+            )
+        ''')
+        
+        # Criação da tabela de emails
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS emails (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                email_type TEXT,
+                email_address TEXT,
+                password TEXT,
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            )
+        ''')
+        
+        conn.commit()
+        conn.close()
+
+# Função para criar um novo usuário
+def create_user(username, password):
+    conn = create_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+        conn.commit()
+        conn.close()
+
+# Função para obter um usuário pelo nome de usuário
+def get_user_by_username(username):
+    conn = create_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+        user = cursor.fetchone()
+        conn.close()
+        return user
+    return None
+
+# Função para adicionar um novo email
+# Função para adicionar um novo email associado ao user_id
+def add_email(user_id, email_type, email_address, password):
+    conn = create_connection()
+    if conn:  # Verifica se a conexão foi estabelecida
+        cursor = conn.cursor()
+        
+        # Insere o email, tipo e senha associados ao user_id
+        cursor.execute("INSERT INTO emails (user_id, email_type, email_address, password) VALUES (?, ?, ?, ?)", 
+                       (user_id, email_type, email_address, password))
+        conn.commit()
+        conn.close()  # Fecha a conexão após a inserção
+        print(f"Email salvo: {email_address}, Tipo: {email_type}, Senha: {password} para user_id: {user_id}")
+
+
+# Função para obter os emails de um usuário em formato de lista de dicionários
+def get_emails_by_user_id(user_id):
+    conn = create_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT email_type, email_address, password FROM emails WHERE user_id = ?", (user_id,))
+        emails = cursor.fetchall()
+        conn.close()
+        # Converte cada resultado em um dicionário
+        return [{"email_type": email["email_type"], "email_address": email["email_address"], "password": email["password"]} for email in emails]
+    return []
+
+
+"""import sqlite3
+
 
 DATABASE = 'database/passwords.db' # Caminho para o banco de dados
-
-
-
 
 def create_tables():
     conn = sqlite3.connect('database/passwords.db')  # Caminho correto para o seu banco de dados
@@ -113,5 +202,5 @@ def get_emails_by_user_id(user_id):
         emails = cursor.fetchall()  # Obtém todos os resultados da consulta
         conn.close()
         return emails  # Retorna uma lista de tuplas com (tipo, email, senha)
-    return []
+    return []"""
 

@@ -22,4 +22,4 @@ def create_app():
 
     return app
 
-    
+    # oque a blibioteca os faz?
