@@ -5,31 +5,39 @@
   }
   
 
-body {
-    font-family: Arial, sans-serif;
-    background-image: url("images/background.jpg"); 
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
+  body {
     display: flex;
     align-items: center;
     justify-content: center; /* Centraliza o conteúdo horizontalmente */
+
+    font-family: Arial, sans-serif;
+    background-image: url("images/background.webp"); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #ffffff;
+    overflow: hidden;
     height: 100vh; /* Faz com que o body ocupe toda a altura da janela */
 }
 
+header {
+    top: 0;
+    left: 0;
+    height: 40px;
+    position: absolute;
+    width: 100%;
+}
+
 .container {
-    width: 80%;
     max-width: 400px; /* Define uma largura máxima para o container */
     margin: auto;
-    padding: 20px; /* Adicionando um pouco de preenchimento ao contêiner */
+    padding: 50px; /* Adicionando um pouco de preenchimento ao contêiner */
     backdrop-filter: blur(16px); /* Fundo branco para o contêiner */
     border-radius: 5px; /* Borda arredondada */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     text-align: center; /* Centraliza o texto dentro do container */
-    border:  2px solid rgba(255, 255, 255 , .2)
+    border:  2px solid rgba(255, 255, 255, 0.2)
 }
+
 
 h2 {
     color: #ffffff;
@@ -64,7 +72,7 @@ input[type="password"]:focus {
 }
 
 button {
-    background-color: #0056b3;
+    background-color: #00aeff;
     color: white;
     padding: 10px;
     border: none;
@@ -76,10 +84,28 @@ button:hover {
     background-color: #004494;
 }
 
+
+h2 {
+    padding-top: 5%;
+    border-top: 1px solid #cacaca;
+}
+
 p {
-    margin-top: 20px; /* Espaçamento superior para separar do formulário */
+    padding-top: 15%;
 }
 
 a {
     color: rgb(255, 0, 230);
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #333;
+    bottom: 0;
+    left: 0;
+    height: 40px;
+    position: fixed;
+    width: 100%;
 }

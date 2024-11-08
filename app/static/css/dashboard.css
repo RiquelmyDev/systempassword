@@ -1,0 +1,71 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+/* Estilo para a página de dashboard */
+
+body {
+
+    font-family: Arial, sans-serif;
+    background-image: url("images/background2.webp"); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #ffffff;
+    overflow: hidden;
+    height: 100vh;
+
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #333;
+    top: 0;
+    left: 0;
+    height: 40px;
+    position: fixed;
+    width: 100%;
+}
+
+h1 {
+    color: #ffffff;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 20%;
+    align-items: center;
+}
+
+.container button {
+    background-color: rgba(211, 211, 211, 0.174);
+    max-width: 400px; /* Define uma largura máxima para o container */
+    margin: auto;
+    padding: 50px; /* Adicionando um pouco de preenchimento ao contêiner */
+    backdrop-filter: blur(16px); /* Fundo branco para o contêiner */
+    border-radius: 5px; /* Borda arredondada */
+    text-align: center; /* Centraliza o texto dentro do container */
+    border:  2px solid rgba(255, 255, 255, 0.2)
+}
+
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #333;
+    bottom: 0;
+    left: 0;
+    height: 40px;
+    position: fixed;
+    width: 100%;
+}

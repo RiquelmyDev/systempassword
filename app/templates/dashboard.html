@@ -4,26 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
 </head>
 <body>
     <header>
-        <h1>Bem-vindo ao seu Dashboard</h1>
+        <h1>Bem vindo {{ username }} , que vamos fazer?</h1>
     </header>
 
     <main>
-        <div class="conteiner">
+        <div class="container">
             <nav>
-                <ul>
-                    <li><a href="{{ url_for('main.manage_passwords') }}">Gerenciar Senhas</a></li>
-                    <li><a href="{{ url_for('main.view_passwords') }}">Ver Senhas</a></li>
-                    <li><a href="{{ url_for('main.logout') }}">Sair</a></li>
-                </ul>
+                <button><a href="/manage_passwords">Adicionar novos emails</a></button>
+                <button><a href="/view_passwords">Ver emails salvos</a></button>
             </nav>
         </div>
     </main>
 
     <footer>
-
+        <button><a href="/logout">Sair</a></button>
     </footer>
 </body>
 </html>
