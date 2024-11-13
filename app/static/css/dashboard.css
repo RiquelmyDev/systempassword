@@ -7,6 +7,9 @@
 /* Estilo para a página de dashboard */
 
 body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     font-family: Arial, sans-serif;
     background-image: url("images/background2.webp"); 
@@ -40,21 +43,33 @@ h1 {
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    padding: 20%;
-    align-items: center;
-}
 
-.container button {
-    background-color: rgba(211, 211, 211, 0.174);
     max-width: 400px; /* Define uma largura máxima para o container */
     margin: auto;
     padding: 50px; /* Adicionando um pouco de preenchimento ao contêiner */
     backdrop-filter: blur(16px); /* Fundo branco para o contêiner */
     border-radius: 5px; /* Borda arredondada */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     text-align: center; /* Centraliza o texto dentro do container */
     border:  2px solid rgba(255, 255, 255, 0.2)
+}
+
+.container button {
+    background-color: rgba(0, 0, 0, 0.329);
+    max-width: 400px; /* Define uma largura máxima para o container */
+    min-width: 300px;
+    margin: auto;
+    padding: 10px; /* Adicionando um pouco de preenchimento ao contêiner */
+    backdrop-filter: blur(16px); /* Fundo branco para o contêiner */
+    border-radius: 5px; /* Borda arredondada */
+    text-align: center; /* Centraliza o texto dentro do container */
+    border: 1px solid #ffffff42;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 a {

@@ -19,14 +19,32 @@ def login_required(f):
 # Rota para o registro de novos usuários
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    User Registration
+    ---
+    tags:
+      - User
+    parameters:
+      - name: username
+        in: formData
+        type: string
+        required: true
+        description: Username for the new user
+      - name: password
+        in: formData
+        type: string
+        required: true
+        description: Password for the new user
+    responses:
+      200:
+        description: User registered successfully
+      400:
+        description: Invalid input
+    """
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-        # Gera o hash da senha
         hashed_password = generate_password_hash(password)
-
-        # Cria um novo usuário no banco de dados
         create_user(username, hashed_password)
         flash('Usuário registrado com sucesso! Faça login para continuar.')
         return redirect(url_for('main.login'))
@@ -35,70 +53,138 @@ def register():
 # Rota para login de usuários
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    User Login
+    ---
+    tags:
+      - User
+    parameters:
+      - name: username
+        in: formData
+        type: string
+        required: true
+        description: Username of the user
+      - name: password
+        in: formData
+        type: string
+        required: true
+        description: Password of the user
+    responses:
+      200:
+        description: Login successful
+      401:
+        description: Unauthorized (invalid username or password)
+    """
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-        # Busca o usuário no banco de dados
         user = get_user_by_username(username)
-
-        # Verifica se o usuário existe e se a senha está correta
         if user and check_password_hash(user['password'], password):
-            session['user_id'] = user['id']  # Armazena o ID do usuário na sessão
+            session['user_id'] = user['id']
             flash('Login bem-sucedido!')
             return redirect(url_for('main.dashboard'))
         else:
             flash('Usuário ou senha inválidos.')
-
     return render_template('login.html')
 
 # Rota para o dashboard (página inicial após login)
 @bp.route('/dashboard')
 @login_required
 def dashboard():
+    """
+    Dashboard
+    ---
+    tags:
+      - User
+    responses:
+      200:
+        description: Dashboard page for authenticated users
+      401:
+        description: Unauthorized
+    """
     return render_template('dashboard.html')
 
 # Rota para adicionar um novo email
 @bp.route('/manage_passwords', methods=['GET', 'POST'])
 @login_required
 def manage_passwords():
+    """
+    Manage Passwords
+    ---
+    tags:
+      - Email
+    parameters:
+      - name: email_type
+        in: formData
+        type: string
+        required: true
+        description: Type of email (e.g., Personal, Work)
+      - name: email_address
+        in: formData
+        type: string
+        required: true
+        description: Email address
+      - name: password
+        in: formData
+        type: string
+        required: true
+        description: Password for the email
+    responses:
+      200:
+        description: Email added successfully
+      400:
+        description: Invalid input
+    """
     if request.method == 'POST':
         email_type = request.form['email_type']
         email_address = request.form['email_address']
         password = request.form['password']
-        user_id = session['user_id']  # Obtém o ID do usuário da sessão
-        
-        # Adiciona o novo email ao banco de dados
+        user_id = session['user_id']
         add_email(user_id, email_type, email_address, password)
         flash('Email adicionado com sucesso!')
         return redirect(url_for('main.manage_passwords'))
-
     return render_template('manage_passwords.html')
 
 # Rota para visualizar os emails salvos
 @bp.route('/view_passwords', methods=['GET'])
 @login_required
 def view_passwords():
-    user_id = session['user_id']  # Obtém o ID do usuário logado
-    
-    # Recupera os emails do usuário
+    """
+    View Saved Emails
+    ---
+    tags:
+      - Email
+    responses:
+      200:
+        description: List of saved emails
+      401:
+        description: Unauthorized
+    """
+    user_id = session['user_id']
     emails = get_emails_by_user_id(user_id)
-    print(f"Emails recuperados para user_id {user_id}: {emails}")
-
-    # Verifica se a consulta retornou algum resultado
     if not emails:
         flash('Você ainda não salvou nenhum email.')
-        
-    # Exibe a lista de emails na página
     return render_template('view_passwords.html', emails=emails)
 
 # Rota para logout
 @bp.route('/logout')
 @login_required
 def logout():
-    session.clear()  # Limpa a sessão
+    """
+    User Logout
+    ---
+    tags:
+      - User
+    responses:
+      200:
+        description: Logout successful
+      401:
+        description: Unauthorized
+    """
+    session.clear()
     flash('Você foi desconectado com sucesso.')
     return redirect(url_for('main.login'))
+
 
 
 """from flask import Blueprint, render_template, request, redirect, url_for, session, flash

@@ -4,6 +4,12 @@ DATABASE = 'database/passwords.db'  # Caminho para o banco de dados
 
 # Função para criar uma conexão com o banco de dados
 def create_connection():
+    """
+    Creates a connection to the SQLite database.
+    
+    Returns:
+        conn: SQLite connection object if successful, None otherwise.
+    """
     try:
         conn = sqlite3.connect(DATABASE)
         conn.row_factory = sqlite3.Row  # Permite acessar as colunas pelo nome
@@ -14,6 +20,9 @@ def create_connection():
 
 # Função para criar as tabelas no banco de dados
 def create_tables(): 
+    """
+    Creates the 'users' and 'emails' tables in the database if they don't exist.
+    """
     conn = create_connection()
     if conn:
         cursor = conn.cursor()
@@ -44,6 +53,13 @@ def create_tables():
 
 # Função para criar um novo usuário
 def create_user(username, password):
+    """
+    Inserts a new user into the 'users' table.
+    
+    Args:
+        username (str): Username of the new user.
+        password (str): Hashed password of the new user.
+    """
     conn = create_connection()
     if conn:
         cursor = conn.cursor()
@@ -53,6 +69,15 @@ def create_user(username, password):
 
 # Função para obter um usuário pelo nome de usuário
 def get_user_by_username(username):
+    """
+    Retrieves a user by their username.
+    
+    Args:
+        username (str): The username to search for.
+    
+    Returns:
+        dict: A dictionary containing the user's information, or None if not found.
+    """
     conn = create_connection()
     if conn:
         cursor = conn.cursor()
@@ -62,9 +87,17 @@ def get_user_by_username(username):
         return user
     return None
 
-# Função para adicionar um novo email
 # Função para adicionar um novo email associado ao user_id
 def add_email(user_id, email_type, email_address, password):
+    """
+    Inserts a new email associated with a user into the 'emails' table.
+    
+    Args:
+        user_id (int): The ID of the user to associate the email with.
+        email_type (str): Type/category of the email (e.g., 'Work', 'Personal').
+        email_address (str): The email address.
+        password (str): The password for the email.
+    """
     conn = create_connection()
     if conn:  # Verifica se a conexão foi estabelecida
         cursor = conn.cursor()
@@ -76,9 +109,17 @@ def add_email(user_id, email_type, email_address, password):
         conn.close()  # Fecha a conexão após a inserção
         print(f"Email salvo: {email_address}, Tipo: {email_type}, Senha: {password} para user_id: {user_id}")
 
-
 # Função para obter os emails de um usuário em formato de lista de dicionários
 def get_emails_by_user_id(user_id):
+    """
+    Retrieves all emails associated with a specific user ID.
+    
+    Args:
+        user_id (int): The ID of the user whose emails to retrieve.
+    
+    Returns:
+        list: A list of dictionaries containing email information (type, address, and password).
+    """
     conn = create_connection()
     if conn:
         cursor = conn.cursor()
@@ -88,6 +129,7 @@ def get_emails_by_user_id(user_id):
         # Converte cada resultado em um dicionário
         return [{"email_type": email["email_type"], "email_address": email["email_address"], "password": email["password"]} for email in emails]
     return []
+
 
 
 """import sqlite3
