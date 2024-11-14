@@ -23,3 +23,15 @@ def create_app():
     return app
 
     # oque a blibioteca os faz?
+
+def contact():
+    print("Do you think it's better to chat on Wpp?")
+    resposta = input("If yes, send the number ").strip().lower()
+
+    if resposta == "yes":
+        contato = input("What num int? ")
+        print(f"")
+    elif resposta == "no":
+        print("I understand")
+    else:
+        print("Alright, let's continue our conversation here!")
